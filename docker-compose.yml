@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    command: pnpm run start:prod  
+    environment:
+      - REDIS_URL=redis
+      - NODE_ENV=development
+      - HTTP_PORT=3005
+      - SERVER_URL=http://localhost:3005
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
+    restart: unless-stopped  
+
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped    
